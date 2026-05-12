@@ -256,14 +256,23 @@
     padding-top: 5rem;
     position: relative;
     overflow: hidden;
+    max-width: 1440px;
+    margin: 0 auto;
+    width: 100%;
   }
 
-
+  /* Wrapper to fill full width behind hero */
+  .hero-bg-wrapper {
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+  }
 
   .hero-left {
     display: flex; flex-direction: column; justify-content: center;
-    padding: 4rem 3rem 4rem 3rem;
-    position: relative; z-index: 1;
+    padding: 4rem 3rem 4rem max(2.5rem, calc((100vw - 1440px) / 2 + 2.5rem));
+    position: relative; z-index: 2;
+    background: transparent;
   }
 
   .hero-tag {
@@ -371,18 +380,21 @@
 
   .btn-secondary:hover { color: var(--ink); }
 
-  .hero-right {
-    position: relative;
-    background: var(--white);
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden;
-    min-height: 500px;
-  }
+.hero-right {
+  height: 500px;
+  max-width: 100%;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
   .hero-visual {
     position: relative;
     width: 100%; height: 100%;
     display: flex; align-items: center; justify-content: center;
+	
   }
 
   /* Spline scene container */
@@ -451,14 +463,14 @@
     pointer-events: none;
   }
 
-  .tag-solidworks { top: 20%; left: 8%; animation: float 4s ease-in-out infinite; }
-  .tag-dfm { top: 35%; right: 6%; animation: float 4s ease-in-out infinite 1s; }
-  .tag-fea { bottom: 30%; left: 5%; animation: float 4s ease-in-out infinite 2s; }
-  .tag-patent { bottom: 20%; right: 10%; animation: float 4s ease-in-out infinite 0.5s; }
+  .tag-solidworks { top: 20%; left: 8%; animation: float 4s ease-in-out infinite; will-change: transform; }
+  .tag-dfm { top: 35%; right: 6%; animation: float 4s ease-in-out infinite 1s; will-change: transform; }
+  .tag-fea { bottom: 30%; left: 5%; animation: float 4s ease-in-out infinite 2s; will-change: transform; }
+  .tag-patent { bottom: 20%; right: 10%; animation: float 4s ease-in-out infinite 0.5s; will-change: transform; }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
+    0%, 100% { transform: translate3d(0, 0, 0); }
+    50% { transform: translate3d(0, -6px, 0); }
   }
 
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -672,6 +684,11 @@
     color: var(--ghost);
     overflow: hidden;
     position: relative;
+  }
+
+  /* Project image carousel always has white background */
+  .project-img-carousel {
+    background: #ffffff !important;
   }
 
   .project-category {
@@ -1162,9 +1179,9 @@
     .hamburger { display: flex; }
     .mobile-nav { display: flex; }
 
-    .hero { grid-template-columns: 1fr; min-height: auto; padding-top: 4rem; }
+    .hero { grid-template-columns: 1fr; min-height: auto; padding-top: 4rem; max-width: 100%; }
     .hero-left { padding: 2rem 1.25rem 2rem; }
-    .hero-right { height: 280px; }
+    .hero-right { height: 380px; max-width: 100%; padding-right: 0; overflow: visible; }
 
     .about-grid { grid-template-columns: 1fr; gap: 2rem; }
     .contact-inner { grid-template-columns: 1fr; gap: 2rem; }
@@ -1189,7 +1206,20 @@
     /* ── HERO: reduce the huge top gap ── */
     .hero { padding-top: 4rem; }
     .hero-left { padding: 1.25rem 1rem 1.5rem; }
-    .hero-right { height: 220px; }
+    .hero-right { height: 340px; max-width: 100%; padding-right: 0; overflow: visible; }
+
+    /* Adjust floating tags so they stay inside viewport on mobile */
+    .tag-solidworks { top: 12%; left: 2%; }
+    .tag-dfm { top: 28%; right: 2%; }
+    .tag-fea { bottom: 22%; left: 2%; }
+    .tag-patent { bottom: 12%; right: 4%; }
+
+    /* Scale the Spline canvas down so the robot's arms are fully visible */
+	#splineWrapper {
+	transform: scale(1.2);
+	padding-left: 0;
+	transform-origin: center center;
+					}
     .hero-name { font-size: clamp(2.4rem, 10vw, 3.5rem); }
     .hero-stats {
       display: grid;
@@ -1216,20 +1246,20 @@
     /* ── GOOEY: fix text overflow ── */
     .gooey-section { padding: 3rem 1rem; overflow: hidden; }
     .gooey-container {
-      height: 100px;
+      height: 70px;
       overflow: hidden;
       width: 100%;
       max-width: 100vw;
     }
-    .gooey-morph-wrap { overflow: hidden; }
+    .gooey-morph-wrap { overflow: hidden; display: flex; align-items: center; justify-content: center; }
     .gooey-text {
-      font-size: clamp(1.2rem, 9vw, 2.2rem);
+      font-size: clamp(1.2rem, 6vw, 2rem);
       white-space: nowrap;
       width: 94vw;
       max-width: 94vw;
       text-align: center;
-      left: 3vw;
-      transform: none;
+      left: 50%;
+      transform: translateX(-50%);
       overflow: hidden;
     }
 
@@ -1272,7 +1302,7 @@
     position: relative;
     width: 100%;
     max-width: 900px;
-    height: 110px;
+    height: 77px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1300,9 +1330,9 @@
     text-align: center;
     font-family: 'Inter', sans-serif;
     font-weight: 800;
-    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-size: clamp(2rem, 3.5vw, 3.2rem);
     letter-spacing: -0.04em;
-    line-height: 1;
+    line-height: 1.05;
     color: var(--white);
     user-select: none;
     white-space: nowrap;
@@ -1321,8 +1351,6 @@
     border-radius: 50%;
     pointer-events: none;
     z-index: 99999;
-    transform: translate(-50%, -50%);
-    transition: background 0.2s, transform 0.1s;
     will-change: transform;
   }
 
@@ -1335,7 +1363,6 @@
     border-radius: 50%;
     pointer-events: none;
     z-index: 99998;
-    transform: translate(-50%, -50%);
     transition: border-color 0.2s, width 0.25s, height 0.25s, opacity 0.25s;
     will-change: transform;
     opacity: 0.7;
@@ -1540,6 +1567,7 @@ function showCanvasFallback() {
     H = wrapper.offsetHeight || 600;
     canvas.width  = W * dpr; canvas.height = H * dpr;
     canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    gridCanvas = null; // invalidate grid cache
   }
   window.addEventListener('load', resize);
   window.addEventListener('resize', resize);
@@ -1708,7 +1736,7 @@ function showCanvasFallback() {
       const oy = baseY - s * 68;
       // eye socket
       ctx.beginPath(); ctx.ellipse(ox, oy, s*11, s*10, 0, 0, Math.PI*2);
-      ctx.fillStyle = dark ? '#0a0a1a' : '#c7d7ff'; ctx.fill();
+      ctx.fillStyle = dark ? '#0d1a3a' : '#c7d7ff'; ctx.fill();
       ctx.strokeStyle = accentCol; ctx.lineWidth = 1.2; ctx.stroke();
       // iris
       ctx.beginPath(); ctx.arc(ox + ex * 0.6, oy + ey * 0.6, s*6, 0, Math.PI*2);
@@ -1738,6 +1766,19 @@ function showCanvasFallback() {
     ctx.restore();
   }
 
+  let gridCanvas = null;
+  function buildGrid(dark) {
+    gridCanvas = document.createElement('canvas');
+    gridCanvas.width = W * dpr; gridCanvas.height = H * dpr;
+    const gc = gridCanvas.getContext('2d');
+    gc.scale(dpr, dpr);
+    gc.strokeStyle = dark ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.035)';
+    gc.lineWidth = 0.5;
+    for (let x = 0; x < W; x += 50) { gc.beginPath(); gc.moveTo(x,0); gc.lineTo(x,H); gc.stroke(); }
+    for (let y = 0; y < H; y += 50) { gc.beginPath(); gc.moveTo(0,y); gc.lineTo(W,y); gc.stroke(); }
+  }
+  let prevDark = null;
+
   function draw(now) {
     requestAnimationFrame(draw);
     if (!W || !H) return;
@@ -1745,11 +1786,9 @@ function showCanvasFallback() {
     ctx.clearRect(0, 0, W, H);
     const dark = isDark();
 
-    // subtle grid
-    ctx.strokeStyle = dark ? 'rgba(255,255,255,0.025)' : 'rgba(0,0,0,0.035)';
-    ctx.lineWidth = 0.5;
-    for (let x = 0; x < W; x += 50) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
-    for (let y = 0; y < H; y += 50) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    // subtle grid (cached offscreen)
+    if (!gridCanvas || dark !== prevDark) { prevDark = dark; buildGrid(dark); }
+    ctx.drawImage(gridCanvas, 0, 0, W, H);
 
     // particles
     particles.forEach(p => {
@@ -2421,14 +2460,17 @@ function showCanvasFallback() {
 
   let mouseX = -999, mouseY = -999;
   let ringX  = -999, ringY  = -999;
-  let rafId;
 
-  // Snap dot instantly, lag ring for magnetic feel
+  // Use transform for GPU-composited movement (no layout reflow)
+  dot.style.left  = '0px';
+  dot.style.top   = '0px';
+  ring.style.left = '0px';
+  ring.style.top  = '0px';
+
   document.addEventListener('mousemove', e => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-    dot.style.left = mouseX + 'px';
-    dot.style.top  = mouseY + 'px';
+    dot.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%))`;
   });
 
   document.addEventListener('mouseleave', () => {
@@ -2443,12 +2485,12 @@ function showCanvasFallback() {
 
   // Scale dot on click
   document.addEventListener('mousedown', () => {
-    dot.style.transform  = 'translate(-50%, -50%) scale(2.5)';
-    ring.style.transform = 'translate(-50%, -50%) scale(0.75)';
+    dot.style.transform  = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%)) scale(2.5)`;
+    ring.style.transform = `translate(calc(${ringX}px - 50%), calc(${ringY}px - 50%)) scale(0.75)`;
   });
   document.addEventListener('mouseup', () => {
-    dot.style.transform  = 'translate(-50%, -50%) scale(1)';
-    ring.style.transform = 'translate(-50%, -50%) scale(1)';
+    dot.style.transform  = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%)) scale(1)`;
+    ring.style.transform = `translate(calc(${ringX}px - 50%), calc(${ringY}px - 50%)) scale(1)`;
   });
 
   // Enlarge ring when hovering interactive elements
@@ -2458,13 +2500,11 @@ function showCanvasFallback() {
       ring.style.width   = '52px';
       ring.style.height  = '52px';
       ring.style.opacity = '0.45';
-      dot.style.transform = 'translate(-50%, -50%) scale(1.8)';
     });
     el.addEventListener('mouseleave', () => {
       ring.style.width   = '32px';
       ring.style.height  = '32px';
       ring.style.opacity = '0.7';
-      dot.style.transform = 'translate(-50%, -50%) scale(1)';
     });
   });
 
@@ -2472,9 +2512,8 @@ function showCanvasFallback() {
   function animateRing() {
     ringX += (mouseX - ringX) * 0.12;
     ringY += (mouseY - ringY) * 0.12;
-    ring.style.left = ringX + 'px';
-    ring.style.top  = ringY + 'px';
-    rafId = requestAnimationFrame(animateRing);
+    ring.style.transform = `translate(calc(${ringX}px - 50%), calc(${ringY}px - 50%))`;
+    requestAnimationFrame(animateRing);
   }
   animateRing();
 })();
@@ -2698,15 +2737,19 @@ function closeModalBtn() {
 
 
 // ── NAV SCROLL EFFECT
+let lastScroll = -1;
 window.addEventListener('scroll', () => {
+  const sy = window.scrollY;
+  if (Math.abs(sy - lastScroll) < 2) return;
+  lastScroll = sy;
   const nav = document.querySelector('nav');
   const dark = document.documentElement.style.getPropertyValue('--white') === '#0e0e0e';
   if (dark) {
-    nav.style.borderBottomColor = window.scrollY > 50 ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)';
+    nav.style.borderBottomColor = sy > 50 ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)';
   } else {
-    nav.style.borderBottomColor = window.scrollY > 50 ? 'rgba(10,10,10,0.2)' : 'rgba(10,10,10,0.08)';
+    nav.style.borderBottomColor = sy > 50 ? 'rgba(10,10,10,0.2)' : 'rgba(10,10,10,0.08)';
   }
-});
+}, { passive: true });
 
 
 // ── GOOEY TEXT ANIMATION
